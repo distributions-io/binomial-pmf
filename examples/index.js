@@ -1,7 +1,7 @@
 'use strict';
 
 var matrix = require( 'dstructs-matrix' ),
-	pdf = require( './../lib' );
+	pmf = require( './../lib' );
 
 var data,
 	mat,
@@ -13,9 +13,9 @@ var data,
 // Plain arrays...
 data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = i * 0.5;
+	data[ i ] = i;
 }
-out = pdf( data );
+out = pmf( data );
 console.log( 'Arrays: %s\n', out );
 
 
@@ -29,7 +29,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': data[ i ]
 	};
 }
-out = pdf( data, {
+out = pmf( data, {
 	'accessor': getValue
 });
 console.log( 'Accessors: %s\n', out );
@@ -42,7 +42,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': [ i, data[ i ].x ]
 	};
 }
-out = pdf( data, {
+out = pmf( data, {
 	'path': 'x/1',
 	'sep': '/'
 });
@@ -57,7 +57,7 @@ data = new Int32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = i;
 }
-tmp = pdf( data );
+tmp = pmf( data );
 out = '';
 for ( i = 0; i < data.length; i++ ) {
 	out += tmp[ i ];
@@ -71,13 +71,13 @@ console.log( 'Typed arrays: %s\n', out );
 // ----
 // Matrices...
 mat = matrix( data, [5,2], 'int32' );
-out = pdf( mat );
+out = pmf( mat );
 console.log( 'Matrix: %s\n', out.toString() );
 
 
 // ----
 // Matrices (custom output data type)...
-out = pdf( mat, {
-	'dtype': 'uint8'
+out = pmf( mat, {
+	'dtype': 'float32'
 });
 console.log( 'Matrix (%s): %s\n', out.dtype, out.toString() );

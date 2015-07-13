@@ -2,12 +2,14 @@ Probability Density Function
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) distribution probability density function (PDF).
+> [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) distribution probability mass function (PMF).
 
-The [probability density function](https://en.wikipedia.org/wiki/Probability_density_function) (PDF) for a [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) random variable is
+The [probability mass function](https://en.wikipedia.org/wiki/Probability_mass_function) (PMF) for a [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) random variable is
 
-<div class="equation" align="center" data-raw-text="" data-equation="eq:pdf_function">
-	<img src="" alt="Probability density function (PDF) for a Binomial distribution.">
+<div class="equation" align="center" data-raw-text="f(x;n,p)=P(X=x;n,p)=\begin{cases} \textstyle {n \choose x}\, p^x (1-p)^{n-x} & \text{ for } x = 0,1,2,\ldots \\
+0 & \text{ otherwise}
+\end{cases}" data-equation="eq:pmf_function">
+	<img src="https://cdn.rawgit.com/distributions-io/binomial-pmf/2c91ff694b52547e5978337d1826d1ade8be9d0e/docs/img/eqn.svg" alt="Probability mass function (PMF) for a Binomial distribution.">
 	<br>
 </div>
 
@@ -16,7 +18,7 @@ where `n` is the number of trails and `p` is the success probability.
 ## Installation
 
 ``` bash
-$ npm install distributions-binomial-pdf
+$ npm install distributions-binomial-pmf
 ```
 
 For use in the browser, use [browserify](https://github.com/substack/node-browserify).
@@ -25,12 +27,12 @@ For use in the browser, use [browserify](https://github.com/substack/node-browse
 ## Usage
 
 ``` javascript
-var pdf = require( 'distributions-binomial-pdf' );
+var pmf = require( 'distributions-binomial-pmf' );
 ```
 
-#### pdf( x[, options] )
+#### pmf( x[, options] )
 
-Evaluates the [probability density function](https://en.wikipedia.org/wiki/Probability_density_function) (PDF) for the [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) distribution. `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix).
+Evaluates the [probability mass function](https://en.wikipedia.org/wiki/Probability_mass_function) (PMF) for the [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) distribution. `x` may be either a [`number`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number), an [`array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays), or a [`matrix`](https://github.com/dstructs/matrix).
 
 ``` javascript
 var matrix = require( 'dstructs-matrix' ),
@@ -39,32 +41,35 @@ var matrix = require( 'dstructs-matrix' ),
 	x,
 	i;
 
-out = pdf( 1 );
+out = pmf( 1 );
 // returns
 
-out = pdf( -1 );
+out = pmf( -1 );
 // returns 0
 
-x = [ 0, 0.5, 1, 1.5, 2, 2.5 ];
-out = pdf( x );
+out = returns( 1.5 ):
+// returns 0
+
+x = [ 0, 1, 2, 3, 4, 5 ];
+out = pmf( x );
 // returns [...]
 
 x = new Int8Array( x );
-out = pdf( x );
+out = pmf( x );
 // returns Float64Array( [...] )
 
 x = new Int16Array( 6 );
 for ( i = 0; i < 6; i++ ) {
-	x[ i ] = i*0.5;
+	x[ i ] = i;
 }
 mat = matrix( x, [3,2], 'int16' );
 /*
-	[ 0  0.5
-	  1  1.5
-	  2  2.5 ]
+	[ 0  1
+	  2  3
+	  4  5 ]
 */
 
-out = pdf( mat );
+out = pmf( mat );
 /*
 	[
 
@@ -87,7 +92,7 @@ A [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) distribution i
 ``` javascript
 var x = [ 0, 0.5, 1, 1.5, 2, 2.5 ];
 
-var out = pdf( x, {
+var out = pmf( x, {
 	'n': 2,
 	'p': 7,
 });
@@ -99,18 +104,18 @@ For non-numeric `arrays`, provide an accessor `function` for accessing `array` v
 ``` javascript
 var data = [
 	[0,0],
-	[1,0.5],
-	[2,1],
-	[3,1.5],
-	[4,2],
-	[5,2.5]
+	[1,1],
+	[2,2],
+	[3,3],
+	[4,4],
+	[5,5]
 ];
 
 function getValue( d, i ) {
 	return d[ 1 ];
 }
 
-var out = pdf( data, {
+var out = pmf( data, {
 	'accessor': getValue
 });
 // returns [...]
@@ -122,14 +127,14 @@ To [deepset](https://github.com/kgryte/utils-deep-set) an object `array`, provid
 ``` javascript
 var data = [
 	{'x':[0,0]},
-	{'x':[1,0.5]},
-	{'x':[2,1]},
-	{'x':[3,1.5]},
-	{'x':[4,2]},
-	{'x':[5,2.5]}
+	{'x':[1,1]},
+	{'x':[2,2]},
+	{'x':[3,3]},
+	{'x':[4,4]},
+	{'x':[5,5]}
 ];
 
-var out = pdf( data, {
+var out = pmf( data, {
 	'path': 'x/1',
 	'sep': '/'
 });
@@ -148,23 +153,23 @@ var bool = ( data === out );
 // returns true
 ```
 
-By default, when provided a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix), the output data structure is `float64` in order to preserve precision. To specify a different data type, set the `dtype` option (see [`matrix`](https://github.com/dstructs/matrix) for a list of acceptable data types).
+By default, when provided a [`typed array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Typed_arrays) or [`matrix`](https://github.com/dstructs/matrix), the output data structure is `float64` in order to preserve precision. To specify a different data type, set the `dtype` option (see [`matrix`](https://github.com/dstructs/matrix) for a list of acceptable data types). Since the output of the function is a probability, i.e. a value between zero and one, the result will be always truncated to zero when choosing an integer data-type unless the specified distribution is degenerate and takes a certain value with probability 1.
 
 ``` javascript
 var x, out;
 
 x = new Int8Array( [0,1,2,3,4] );
 
-out = pdf( x, {
-	'dtype': 'int32'
+out = pmf( x, {
+	'dtype': 'float32'
 });
-// returns Int32Array( [...] )
+// returns Float32Array( [...] )
 
 // Works for plain arrays, as well...
-out = pdf( [0,0.5,1,1.5,2], {
-	'dtype': 'uint8'
+out = pmf( [0,0.5,1,1.5,2], {
+	'dtype': 'float32'
 });
-// returns Uint8Array( [...] )
+// returns Float32Array( [...] )
 ```
 
 By default, the function returns a new data structure. To mutate the input data structure (e.g., when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
@@ -178,7 +183,7 @@ var bool,
 
 x = [ 0, 0.5, 1, 1.5, 2 ];
 
-out = pdf( x, {
+out = pmf( x, {
 	'copy': false
 });
 // returns [...]
@@ -188,16 +193,16 @@ bool = ( x === out );
 
 x = new Int16Array( 6 );
 for ( i = 0; i < 6; i++ ) {
-	x[ i ] = i*0.5;
+	x[ i ] = i;
 }
 mat = matrix( x, [3,2], 'int16' );
 /*
-	[ 0  0.5
-	  1  1.5
-	  2  2.5 ]
+	[ 0  1
+	  2  3
+	  4  5 ]
 */
 
-out = pdf( mat, {
+out = pmf( mat, {
 	'copy': false
 });
 /*
@@ -213,21 +218,21 @@ bool = ( mat === out );
 
 ## Notes
 
-*	If an element is __not__ a numeric value, the evaluated [PDF](https://en.wikipedia.org/wiki/Binomial_distribution) is `NaN`.
+*	If an element is __not__ a numeric value, the evaluated [PMF](https://en.wikipedia.org/wiki/Binomial_distribution) is `NaN`.
 
 	``` javascript
 	var data, out;
 
-	out = pdf( null );
+	out = pmf( null );
 	// returns NaN
 
-	out = pdf( true );
+	out = pmf( true );
 	// returns NaN
 
-	out = pdf( {'a':'b'} );
+	out = pmf( {'a':'b'} );
 	// returns NaN
 
-	out = pdf( [ true, null, [] ] );
+	out = pmf( [ true, null, [] ] );
 	// returns [ NaN, NaN, NaN ]
 
 	function getValue( d, i ) {
@@ -240,12 +245,12 @@ bool = ( mat === out );
 		{'x':null}
 	];
 
-	out = pdf( data, {
+	out = pmf( data, {
 		'accessor': getValue
 	});
 	// returns [ NaN, NaN, NaN, NaN ]
 
-	out = pdf( data, {
+	out = pmf( data, {
 		'path': 'x'
 	});
 	/*
@@ -258,20 +263,10 @@ bool = ( mat === out );
 	*/
 	```
 
-*	Be careful when providing a data structure which contains non-numeric elements and specifying an `integer` output data type, as `NaN` values are cast to `0`.
-
-	``` javascript
-	var out = pdf( [ true, null, [] ], {
-		'dtype': 'int8'
-	});
-	// returns Int8Array( [0,0,0] );
-	```
-
-
 ## Examples
 
 ``` javascript
-var pdf = require( 'distributions-binomial-pdf' ),
+var pmf = require( 'distributions-binomial-pmf' ),
 	matrix = require( 'dstructs-matrix' );
 
 var data,
@@ -285,7 +280,7 @@ data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = i * 0.5;
 }
-out = pdf( data );
+out = pmf( data );
 
 // Object arrays (accessors)...
 function getValue( d ) {
@@ -296,7 +291,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': data[ i ]
 	};
 }
-out = pdf( data, {
+out = pmf( data, {
 	'accessor': getValue
 });
 
@@ -306,7 +301,7 @@ for ( i = 0; i < data.length; i++ ) {
 		'x': [ i, data[ i ].x ]
 	};
 }
-out = pdf( data, {
+out = pmf( data, {
 	'path': 'x/1',
 	'sep': '/'
 });
@@ -316,14 +311,14 @@ data = new Int32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = i;
 }
-out = pdf( data );
+out = pmf( data );
 
 // Matrices...
 mat = matrix( data, [5,2], 'int32' );
-out = pdf( mat );
+out = pmf( mat );
 
 // Matrices (custom output data type)...
-out = pdf( mat, {
+out = pmf( mat, {
 	'dtype': 'uint8'
 });
 ```
@@ -374,20 +369,20 @@ $ make view-cov
 Copyright &copy; 2015. The [Compute.io](https://github.com/compute-io) Authors.
 
 
-[npm-image]: http://img.shields.io/npm/v/distributions-binomial-pdf.svg
-[npm-url]: https://npmjs.org/package/distributions-binomial-pdf
+[npm-image]: http://img.shields.io/npm/v/distributions-binomial-pmf.svg
+[npm-url]: https://npmjs.org/package/distributions-binomial-pmf
 
-[travis-image]: http://img.shields.io/travis/distributions-io/binomial-pdf/master.svg
-[travis-url]: https://travis-ci.org/distributions-io/binomial-pdf
+[travis-image]: http://img.shields.io/travis/distributions-io/binomial-pmf/master.svg
+[travis-url]: https://travis-ci.org/distributions-io/binomial-pmf
 
-[coveralls-image]: https://img.shields.io/coveralls/distributions-io/binomial-pdf/master.svg
-[coveralls-url]: https://coveralls.io/r/distributions-io/binomial-pdf?branch=master
+[coveralls-image]: https://img.shields.io/coveralls/distributions-io/binomial-pmf/master.svg
+[coveralls-url]: https://coveralls.io/r/distributions-io/binomial-pmf?branch=master
 
-[dependencies-image]: http://img.shields.io/david/distributions-io/binomial-pdf.svg
-[dependencies-url]: https://david-dm.org/distributions-io/binomial-pdf
+[dependencies-image]: http://img.shields.io/david/distributions-io/binomial-pmf.svg
+[dependencies-url]: https://david-dm.org/distributions-io/binomial-pmf
 
-[dev-dependencies-image]: http://img.shields.io/david/dev/distributions-io/binomial-pdf.svg
-[dev-dependencies-url]: https://david-dm.org/dev/distributions-io/binomial-pdf
+[dev-dependencies-image]: http://img.shields.io/david/dev/distributions-io/binomial-pmf.svg
+[dev-dependencies-url]: https://david-dm.org/dev/distributions-io/binomial-pmf
 
-[github-issues-image]: http://img.shields.io/github/issues/distributions-io/binomial-pdf.svg
-[github-issues-url]: https://github.com/distributions-io/binomial-pdf/issues
+[github-issues-image]: http://img.shields.io/github/issues/distributions-io/binomial-pmf.svg
+[github-issues-url]: https://github.com/distributions-io/binomial-pmf/issues
