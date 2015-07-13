@@ -1,7 +1,7 @@
 {
-  "name": "distributions-binomial-pdf",
+  "name": "distributions-binomial-pmf",
   "version": "0.0.0",
-  "description": "Binomial  distribution probability density function (PDF)",
+  "description": "Binomial  distribution probability mass function (PMF)",
   "author": {
     "name": "Philipp Burckhardt",
     "email": "pburckhardt@outlook.com"
@@ -28,7 +28,14 @@
     "probability",
     "statistics",
     "stats",
-    "pdf"
+    "pmf",
+    "bernoulli",
+    "coin flip",
+    "binomial"
+    "trials"
+    "success probability",
+    "failure probability",
+    "probability mass function"
   ],
   "bugs": {
     "url": "https://github.com/compute-io/binomial-pdf/issues"

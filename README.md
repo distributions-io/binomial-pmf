@@ -42,7 +42,7 @@ var matrix = require( 'dstructs-matrix' ),
 	i;
 
 out = pmf( 1 );
-// returns
+// returns 0.5
 
 out = pmf( -1 );
 // returns 0
@@ -51,8 +51,10 @@ out = returns( 1.5 ):
 // returns 0
 
 x = [ 0, 1, 2, 3, 4, 5 ];
-out = pmf( x );
-// returns [...]
+out = pmf( x, {
+	'n': 5
+});
+// returns [ 0.03125, 0.15625, 0.3125, 0.3125, 0.15625, 0.03125 ]
 
 x = new Int8Array( x );
 out = pmf( x );
@@ -69,11 +71,13 @@ mat = matrix( x, [3,2], 'int16' );
 	  4  5 ]
 */
 
-out = pmf( mat );
+out = pmf( mat, {
+	'n': 5
+});
 /*
-	[
-
-	   ]
+	[ 0.03125 0.15625
+	  0.3125  0.3125
+	  0.15625 0.03125 ]
 */
 ```
 
@@ -87,16 +91,16 @@ The function accepts the following `options`:
 *	__path__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path.
 *	__sep__: [deepget](https://github.com/kgryte/utils-deep-get)/[deepset](https://github.com/kgryte/utils-deep-set) key path separator. Default: `'.'`.
 
-A [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) distribution is a function of 2 parameter(s): `n`(number of trails) and `p`(success probability). By default, `n` is equal to `1` and `p` is equal to `0.5`. To adjust either parameter, set the corresponding option(s).
+A [Binomial](https://en.wikipedia.org/wiki/Binomial_distribution) distribution is a function of 2 parameter(s): `n` (number of trails) and `p` ( success probability). By default, `n` is equal to `1` and `p` is equal to `0.5`, i.e. the function evaluates the PMF of a [Bernoulli](https://en.wikipedia.org/wiki/Bernoulli_distribution) distribution. To adjust either parameter, set the corresponding option(s).
 
 ``` javascript
-var x = [ 0, 0.5, 1, 1.5, 2, 2.5 ];
+var x = [ 0, 1, 2, 3, 4, 5 ];
 
 var out = pmf( x, {
-	'n': 2,
-	'p': 7,
+	'n': 4,
+	'p': 0.9,
 });
-// returns [...]
+// returns [ 1e-04, 0.0036, 0.0486, 0.2916, 0.6561, 0 ]
 ```
 
 For non-numeric `arrays`, provide an accessor `function` for accessing `array` values.
@@ -116,9 +120,11 @@ function getValue( d, i ) {
 }
 
 var out = pmf( data, {
-	'accessor': getValue
+	'accessor': getValue,
+	'n': 4,
+	'p': 0.9
 });
-// returns [...]
+//  returns [ 1e-04, 0.0036, 0.0486, 0.2916, 0.6561, 0 ]
 ```
 
 
@@ -136,16 +142,18 @@ var data = [
 
 var out = pmf( data, {
 	'path': 'x/1',
-	'sep': '/'
+	'sep': '/',
+	'n': 4,
+	'p': 0.9
 });
 /*
 	[
-		{'x':[0,]},
-		{'x':[1,]},
-		{'x':[2,]},
-		{'x':[3,]},
-		{'x':[4,]},
-		{'x':[5,]}
+		{'x':[0,1e-04]},
+		{'x':[1,0.0036]},
+		{'x':[2,0.0486]},
+		{'x':[3,0.2916]},
+		{'x':[4,0.6561]},
+		{'x':[5,0]}
 	]
 */
 
@@ -158,18 +166,18 @@ By default, when provided a [`typed array`](https://developer.mozilla.org/en-US/
 ``` javascript
 var x, out;
 
-x = new Int8Array( [0,1,2,3,4] );
+x = new Int8Array( [0,1] );
 
 out = pmf( x, {
 	'dtype': 'float32'
 });
-// returns Float32Array( [...] )
+// returns Float32Array( [0.5, 0.5] )
 
 // Works for plain arrays, as well...
-out = pmf( [0,0.5,1,1.5,2], {
+out = pmf( [0,1], {
 	'dtype': 'float32'
 });
-// returns Float32Array( [...] )
+// returns Float32Array( [0.5,0.5] )
 ```
 
 By default, the function returns a new data structure. To mutate the input data structure (e.g., when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
@@ -181,12 +189,14 @@ var bool,
 	x,
 	i;
 
-x = [ 0, 0.5, 1, 1.5, 2 ];
+x = [ 0, 1, 2, 3, 4, 5 ];
 
 out = pmf( x, {
-	'copy': false
+	'copy': false,
+	'n': 4,
+	'p': 0.9
 });
-// returns [...]
+// returns [ 1e-04, 0.0036, 0.0486, 0.2916, 0.6561, 0 ]
 
 bool = ( x === out );
 // returns true
@@ -203,12 +213,14 @@ mat = matrix( x, [3,2], 'int16' );
 */
 
 out = pmf( mat, {
-	'copy': false
+	'copy': false,
+	'n': 5,
+	'p': 0.5
 });
 /*
-	[
-
-	   ]
+	[ 0.03125 0.15625
+	  0.3125  0.3125
+	  0.15625 0.03125 ]
 */
 
 bool = ( mat === out );
@@ -278,9 +290,11 @@ var data,
 // Plain arrays...
 data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = i * 0.5;
+	data[ i ] = i;
 }
-out = pmf( data );
+out = pmf( data, {
+	'n': 10
+});
 
 // Object arrays (accessors)...
 function getValue( d ) {
@@ -292,7 +306,8 @@ for ( i = 0; i < data.length; i++ ) {
 	};
 }
 out = pmf( data, {
-	'accessor': getValue
+	'accessor': getValue,
+	'n': 10
 });
 
 // Deep set arrays...
@@ -303,7 +318,8 @@ for ( i = 0; i < data.length; i++ ) {
 }
 out = pmf( data, {
 	'path': 'x/1',
-	'sep': '/'
+	'sep': '/',
+	'n': 10
 });
 
 // Typed arrays...
@@ -311,7 +327,9 @@ data = new Int32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = i;
 }
-out = pmf( data );
+out = pmf( data, {
+	'n': 10
+});
 
 // Matrices...
 mat = matrix( data, [5,2], 'int32' );
@@ -319,7 +337,8 @@ out = pmf( mat );
 
 // Matrices (custom output data type)...
 out = pmf( mat, {
-	'dtype': 'uint8'
+	'dtype': 'float32',
+	'n': 10
 });
 ```
 

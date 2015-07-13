@@ -15,7 +15,9 @@ data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = i;
 }
-out = pmf( data );
+out = pmf( data, {
+	'n': 10
+});
 console.log( 'Arrays: %s\n', out );
 
 
@@ -30,7 +32,8 @@ for ( i = 0; i < data.length; i++ ) {
 	};
 }
 out = pmf( data, {
-	'accessor': getValue
+	'accessor': getValue,
+	'n': 10
 });
 console.log( 'Accessors: %s\n', out );
 
@@ -44,7 +47,8 @@ for ( i = 0; i < data.length; i++ ) {
 }
 out = pmf( data, {
 	'path': 'x/1',
-	'sep': '/'
+	'sep': '/',
+	'n': 10
 });
 console.log( 'Deepset:');
 console.dir( out );
@@ -57,7 +61,9 @@ data = new Int32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
 	data[ i ] = i;
 }
-tmp = pmf( data );
+tmp = pmf( data, {
+	'n': 10
+});
 out = '';
 for ( i = 0; i < data.length; i++ ) {
 	out += tmp[ i ];
@@ -71,13 +77,16 @@ console.log( 'Typed arrays: %s\n', out );
 // ----
 // Matrices...
 mat = matrix( data, [5,2], 'int32' );
-out = pmf( mat );
+out = pmf( mat, {
+	'n': 10
+});
 console.log( 'Matrix: %s\n', out.toString() );
 
 
 // ----
 // Matrices (custom output data type)...
 out = pmf( mat, {
-	'dtype': 'float32'
+	'dtype': 'float32',
+	'n': 10
 });
 console.log( 'Matrix (%s): %s\n', out.dtype, out.toString() );
