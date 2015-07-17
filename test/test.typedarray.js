@@ -7,7 +7,7 @@ var // Expectation library:
 	chai = require( 'chai' ),
 
 	// Module to be tested:
-	pdf = require( './../lib/typedarray.js' );
+	pmf = require( './../lib/typedarray.js' );
 
 
 // VARIABLES //
@@ -18,50 +18,54 @@ var expect = chai.expect,
 
 // TESTS //
 
-describe( 'typed-array pdf', function tests() {
+describe( 'typed-array pmf', function tests() {
 
-	var n = 1,
-		p = 0.5;
+	var n = 100,
+		p = 0.2;
 
 	it( 'should export a function', function test() {
-		expect( pdf ).to.be.a( 'function' );
+		expect( pmf ).to.be.a( 'function' );
 	});
 
-	it( 'should evaluate the Binomial pdf', function test() {
+	it( 'should evaluate the Binomial pmf', function test() {
 		var data, actual, expected, i;
 
 		data = new Float64Array([
-			1e-306,
-			-1e-306,
-			1e-299,
-			-1e-299,
-			0.8,
-			-0.8,
 			1,
-			-1,
-			10,
-			-10,
 			2,
-			-2,
 			3,
-			-3
+			4,
+			5,
+			6,
+			7,
+			8,
+			9,
+			10
 		]);
 		actual = new Float64Array( data.length );
 
-		actual = pdf( actual, data, n, p );
+		actual = pmf( actual, data, n, p );
 
-		// Evaluated on Wolfram Alpha:
 		expected = new Float64Array([
-
+			5.092589940836177e-09,
+			6.302080051784738e-08,
+			5.146698708957596e-07,
+			3.120186092305547e-06,
+			1.49768932430666e-05,
+			5.928353575380548e-05,
+			0.000199023298602061,
+			0.0005784114615622392,
+			0.001478162623992388,
+			0.003362819969582687
 		]);
 
 		for ( i = 0; i < actual.length; i++ ) {
-			assert.closeTo( actual[ i ], expected[ i ], 1e-7 );
+			assert.closeTo( actual[ i ], expected[ i ], 1e-14 );
 		}
 	});
 
 	it( 'should return an empty array if provided an empty array', function test() {
-		assert.deepEqual( pdf( new Int8Array(), new Int8Array(), n, p ), new Int8Array() );
+		assert.deepEqual( pmf( new Int8Array(), new Int8Array(), n, p ), new Int8Array() );
 	});
 
 });

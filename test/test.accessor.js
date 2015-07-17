@@ -7,7 +7,7 @@ var // Expectation library:
 	chai = require( 'chai' ),
 
 	// Module to be tested:
-	pdf = require( './../lib/accessor.js' );
+	pmf = require( './../lib/accessor.js' );
 
 
 // VARIABLES //
@@ -18,37 +18,39 @@ var expect = chai.expect,
 
 // TESTS //
 
-describe( 'accessor pdf', function tests() {
+describe( 'accessor pmf', function tests() {
 
-	var n = 1,
+	var n = 500,
 		p = 0.5;
 
 	it( 'should export a function', function test() {
-		expect( pdf ).to.be.a( 'function' );
+		expect( pmf ).to.be.a( 'function' );
 	});
 
-	it( 'should evaluate the Binomial pdf using an accessor', function test() {
+	it( 'should evaluate the Binomial pmf using an accessor', function test() {
 		var data, actual, expected, i;
 
 		data = [
-			{'x':-3},
-			{'x':-2},
-			{'x':-1},
-			{'x':0},
-			{'x':1},
-			{'x':2},
-			{'x':3}
+			{'x':100},
+			{'x':200},
+			{'x':300},
+			{'x':400},
+			{'x':500}
 		];
 		actual = new Array( data.length );
 
-		actual = pdf( actual, data, n, p,getValue );
+		actual = pmf( actual, data, n, p,getValue );
 
 		expected = [
-
+			6.237245964515566e-44,
+			1.544255011223464e-06,
+			1.544255011223464e-06,
+			6.237245964515566e-44,
+			3.054936363499709e-151
 		];
 
 		for ( i = 0; i < actual.length; i++ ) {
-			assert.closeTo( actual[ i ], expected[ i ], 1e-7 );
+			assert.closeTo( actual[ i ], expected[ i ], 1e-14 );
 		}
 
 		function getValue( d ) {
@@ -58,7 +60,7 @@ describe( 'accessor pdf', function tests() {
 	});
 
 	it( 'should return an empty array if provided an empty array', function test() {
-		assert.deepEqual( pdf( [], [], getValue ), [] );
+		assert.deepEqual( pmf( [], [], getValue ), [] );
 		function getValue( d ) {
 			return d.x;
 		}
@@ -74,7 +76,7 @@ describe( 'accessor pdf', function tests() {
 			{'x':{}}
 		];
 		actual = new Array( data.length );
-		actual = pdf( actual, data, n, p, getValue );
+		actual = pmf( actual, data, n, p, getValue );
 
 		expected = [ NaN, NaN, NaN, NaN ];
 
