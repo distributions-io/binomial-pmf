@@ -1,7 +1,7 @@
 {
   "name": "distributions-binomial-pmf",
   "version": "0.0.0",
-  "description": "Binomial  distribution probability mass function (PMF)",
+  "description": "Binomial distribution probability mass function (PMF)",
   "author": {
     "name": "Philipp Burckhardt",
     "email": "pburckhardt@outlook.com"
@@ -31,8 +31,8 @@
     "pmf",
     "bernoulli",
     "coin flip",
-    "binomial"
-    "trials"
+    "binomial",
+    "trials",
     "success probability",
     "failure probability",
     "probability mass function"
@@ -43,6 +43,7 @@
   "dependencies": {
     "compute-array-constructors": "^1.0.0",
     "dstructs-matrix": "^2.0.0",
+    "log1p": "^1.0.0",
     "utils-deep-get": "^1.0.0",
     "utils-deep-set": "^1.0.1",
     "validate.io-array-like": "^1.0.1",
